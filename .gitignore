@@ -1,0 +1,16 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment/Sensitive files
+includes/config.php
+
+# PHP built-in server files
+.router.php
+
+# Database exports
+database.sql
+
+# Local logs
+*.log
+error_log
