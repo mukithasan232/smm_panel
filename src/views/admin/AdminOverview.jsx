@@ -47,12 +47,15 @@ const AdminOverview = () => {
       const pendingOrders = allOrders.filter(o => o.status === 'Pending' || o.status === 'Processing').length;
       const pendingPayments = allPayments.filter(p => p.status === 'Pending').length;
 
+      const smmBalanceUSD = parseFloat(balanceData.data?.balance || '0');
+      const smmBalanceBDT = (smmBalanceUSD * 120).toFixed(2);
+
       setStats([
         { label: 'Platform Revenue', value: `৳ ${totalRevenue.toFixed(2)}`, icon: <TrendingUp className="text-emerald-500" />, bgColor: 'bg-emerald-500/10', trendUp: true, trend: 'Net' },
         { label: 'Total Clients', value: allUsers.length.toLocaleString(), icon: <Users className="text-blue-500" />, bgColor: 'bg-blue-500/10', trendUp: true, trend: `+${allUsers.length}` },
         { label: 'Active Pipeline', value: pendingOrders.toString(), icon: <ShoppingCart className="text-orange-500" />, bgColor: 'bg-orange-500/10', trendUp: false, trend: 'Queue' },
         { label: 'Funding Requests', value: pendingPayments.toString(), icon: <CreditCard className="text-pink-500" />, bgColor: 'bg-pink-500/10', trendUp: true, trend: `${pendingPayments} New` },
-        { label: 'SMMGen Capital', value: `$ ${balanceData.data?.balance || '0.00'}`, icon: <RefreshCw className="text-purple-500" />, bgColor: 'bg-purple-500/10', trendUp: true, trend: 'API Wallet' },
+        { label: 'API Wallet (BDT)', value: `৳ ${smmBalanceBDT}`, icon: <RefreshCw className="text-purple-500" />, bgColor: 'bg-purple-500/10', trendUp: true, trend: `$ ${smmBalanceUSD}` },
       ]);
 
       setOrders(allOrders.slice(0, 10));
