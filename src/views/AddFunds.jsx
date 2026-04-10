@@ -35,7 +35,7 @@ const AddFunds = () => {
       
       const [userRes, paymentsRes, ordersRes] = await Promise.all([
         fetch('/api/users/profile', { headers }),
-        fetch('/api/payments/my-requests', { headers }),
+        fetch('/api/payments/my-payments', { headers }),
         fetch('/api/orders/my-orders', { headers })
       ]);
 
@@ -80,7 +80,7 @@ const AddFunds = () => {
         body: JSON.stringify({
           method: selectedMethod.toUpperCase(),
           amount: parseFloat(amount),
-          transactionId
+          trxId: transactionId
         })
       });
       const data = await res.json();

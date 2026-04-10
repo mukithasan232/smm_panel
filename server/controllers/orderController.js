@@ -22,9 +22,9 @@ exports.createOrder = async (req, res) => {
       return res.status(404).json({ success: false, message: 'সার্ভিসটি পাওয়া যায়নি।' });
     }
 
-    // 2. Calculate final charge with 40% margin and 120 BDT conversion
+    // 2. Calculate final charge with 30% margin and 120 BDT conversion
     const USD_TO_BDT = 120;
-    const MARGIN = 1.40;
+    const MARGIN = 1.30; 
     const unitRate = (parseFloat(service.rate) * USD_TO_BDT * MARGIN).toFixed(4);
     const charge = (quantity / 1000) * unitRate;
 
@@ -102,6 +102,47 @@ exports.getAllOrders = async (req, res) => {
       success: true,
       count: orders.length,
       data: orders
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+// @desc    Sync order status from Provider
+// @route   GET /api/orders/:id/status
+exports.syncOrderStatus = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'অর্ডারটি পাওয়া যায়নি।' });
+    }
+
+    if (!order.smmgenOrderId) {
+      return res.status(400).json({ success: false, message: 'এই অর্ডারের কোনো প্রোভাইডার আইডি নেই।' });
+    }
+
+    // Call Provider API
+    const providerStatus = await smmProvider.checkStatus(order.smmgenOrderId);
+    
+    // Map SMMGen status to our local status
+    // SMMGen typical: Pending, In progress, Completed, Partial, Canceled, Processing
+    let newStatus = order.status;
+    const s = providerStatus.status.toLowerCase();
+    
+    if (s.includes('pending')) newStatus = 'Pending';
+    else if (s.includes('processing')) newStatus = 'In Progress';
+    else if (s.includes('progress')) newStatus = 'In Progress';
+    else if (s.includes('completed')) newStatus = 'Completed';
+    else if (s.includes('partial')) newStatus = 'Completed'; // Or mark as partial
+    else if (s.includes('canceled')) newStatus = 'Canceled';
+    else if (s.includes('refunded')) newStatus = 'Canceled';
+
+    order.status = newStatus;
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      status: newStatus,
+      raw: providerStatus.status
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

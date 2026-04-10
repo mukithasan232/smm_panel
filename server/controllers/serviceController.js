@@ -10,7 +10,7 @@ exports.getAllServices = async (req, res) => {
     // Formula: DisplayPrice = (api_rate * 120) * 1.40
     // We assume SMMGen rates are in USD per 1000
     const USD_TO_BDT = 120;
-    const MARGIN = 1.40;
+    const MARGIN = 1.30; // 30% Profit Margin (Reduced from 40%)
 
     const services = rawServices.map(service => {
       const originalRate = parseFloat(service.rate);

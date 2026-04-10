@@ -10,6 +10,7 @@ import {
   AlertCircle,
   ExternalLink
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -55,6 +56,22 @@ const OrderHistory = () => {
       case 'Pending': return <Clock className="w-3 h-3" />;
       case 'In Progress': return <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}><Clock className="w-3 h-3" /></motion.div>;
       default: return <AlertCircle className="w-3 h-3" />;
+    }
+  };
+
+  const handleSync = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/orders/${id}/status`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrders(prev => prev.map(o => o._id === id ? { ...o, status: data.status } : o));
+        toast.success('Status synchronized!');
+      }
+    } catch (err) {
+      console.error('Sync error:', err);
     }
   };
 
@@ -146,9 +163,20 @@ const OrderHistory = () => {
                     </div>
                   </td>
                   <td className="text-right pr-10">
-                    <button className="w-12 h-12 rounded-2xl bg-white/5 border border-transparent hover:border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ml-auto group/btn shadow-inner">
-                       <ExternalLink className="w-4 h-4 text-neutral-500 group-hover/btn:text-white transition-colors" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                       <button 
+                         onClick={() => handleSync(order._id)}
+                         className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-accent-primary/20 hover:border-accent-primary/40 text-neutral-500 hover:text-accent-primary transition-all group/sync"
+                         title="Sync Status"
+                       >
+                          <motion.div whileTap={{ rotate: 360 }} transition={{ duration: 0.5 }}>
+                             <Clock className="w-4 h-4" />
+                          </motion.div>
+                       </button>
+                       <button className="w-10 h-10 rounded-xl bg-white/5 border border-transparent hover:border-white/10 flex items-center justify-center hover:bg-white/10 transition-all group/btn shadow-inner">
+                          <ExternalLink className="w-4 h-4 text-neutral-500 group-hover/btn:text-white transition-colors" />
+                       </button>
+                    </div>
                   </td>
                 </motion.tr>
               ))}

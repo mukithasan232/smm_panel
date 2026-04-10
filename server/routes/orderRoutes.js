@@ -8,6 +8,7 @@ router.use(protect); // All order routes need authentication
 
 router.post('/', orderController.createOrder);
 router.get('/my-orders', orderController.getMyOrders);
+router.get('/:id/status', orderController.syncOrderStatus);
 
 // Admin only route
 router.get('/', authorize('admin'), orderController.getAllOrders);
