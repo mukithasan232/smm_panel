@@ -72,16 +72,16 @@ const OrderHistory = () => {
         
         <div className="flex items-center gap-4 w-full md:w-auto">
            <div className="relative flex-1 md:w-96 group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-600 group-focus-within:text-accent-primary transition-colors" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-accent-primary transition-colors" />
               <input 
                 type="text" 
-                placeholder="Search by ID or Service Name..." 
-                className="w-full h-16 bg-[#1f2937]/40 backdrop-blur-md border border-white/5 rounded-2xl pl-14 pr-6 text-sm focus:outline-none focus:border-accent-primary focus:ring-4 focus:ring-accent-primary/10 transition-all placeholder:text-neutral-700 font-bold text-white shadow-xl"
+                placeholder="Search by ID or Service name..." 
+                className="w-full h-14 bg-bg-secondary border border-white/5 rounded-2xl pl-14 pr-6 text-sm font-bold text-white focus:outline-none focus:border-accent-primary focus:ring-4 focus:ring-accent-primary/10 transition-all placeholder:text-neutral-700 shadow-xl"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
            </div>
-           <button className="w-16 h-16 rounded-2xl bg-[#1f2937]/40 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-neutral-400 hover:text-white shadow-xl">
+           <button className="w-14 h-14 rounded-2xl bg-bg-secondary border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-neutral-400 hover:text-white shadow-xl">
               <Filter className="w-5 h-5" />
            </button>
         </div>

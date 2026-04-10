@@ -74,8 +74,8 @@ const AdminPayments = () => {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2">
         <div>
-          <h1 className="text-3xl font-bold mb-1 font-['Outfit'] tracking-tight">পেমেন্ট রিকোয়েস্ট</h1>
-          <p className="text-secondary text-sm">ইউজারদের পাঠানো ম্যানুয়াল পেমেন্টগুলো এখান থেকে এপ্রুভ করুন।</p>
+          <h1 className="text-3xl font-black mb-2 font-['Outfit'] tracking-tighter uppercase">Payment Requests</h1>
+          <p className="text-secondary text-sm font-medium">Verify and approve manual capital deposits from your clients.</p>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
@@ -105,14 +105,14 @@ const AdminPayments = () => {
               <table>
                 <thead>
                   <tr>
-                    <th>ইউজার</th>
-                    <th>পেমেন্ট মেথড</th>
-                    <th>পরিমান</th>
-                    <th>ট্রানজেকশন আইডি (TrxID)</th>
-                    <th>তারিখ</th>
-                    <th>স্ট্যাটাস</th>
-                    <th className="text-right">একশন</th>
-                  </tr>
+                  <th className="rounded-tl-2xl">Client</th>
+                  <th>Method</th>
+                  <th>Amount</th>
+                  <th>Transaction ID</th>
+                  <th>Timestamp</th>
+                  <th>Current State</th>
+                  <th className="text-right rounded-tr-2xl">Operations</th>
+                </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 ? (

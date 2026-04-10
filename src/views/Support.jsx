@@ -22,7 +22,7 @@ const Support = () => {
     const supportToast = toast.loading('টিকিট প্রসেস হচ্ছে...');
     
     setTimeout(() => {
-      toast.success('সফলভাবে টিকিট ওপেন হয়েছে! আমাদের টিম শীঘ্রই যোগাযোগ করবে।', { id: supportToast });
+      toast.success('Ticket opened successfully! Our elite team will respond shortly.', { id: supportToast });
       setLoading(false);
     }, 2000);
   };
@@ -59,32 +59,32 @@ const Support = () => {
                </div>
 
                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                       <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Subject / বিষয়</label>
+                       <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Case Subject</label>
                        <input 
                          required
                          type="text" 
-                         placeholder="e.g. Payment Issue" 
-                         className="w-full h-14 bg-white/5 border border-white/5 rounded-2xl px-6 font-bold focus:outline-none focus:border-accent-primary transition-all outline-none" 
+                         placeholder="e.g. Deposit mismatch" 
+                         className="w-full h-14 bg-bg-secondary border border-white/5 rounded-2xl px-6 font-bold focus:outline-none focus:border-accent-primary transition-all outline-none" 
                        />
                     </div>
                     <div className="space-y-3">
                        <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Priority Level</label>
-                       <select className="w-full h-14 bg-white/5 border border-white/5 rounded-2xl px-6 font-bold focus:outline-none focus:border-accent-primary transition-all outline-none appearance-none">
-                          <option className="bg-bg-secondary" value="low">Standard Speed</option>
-                          <option className="bg-bg-secondary" value="medium">Medium Priority</option>
-                          <option className="bg-bg-secondary" value="high">Urgent Growth</option>
+                       <select className="w-full h-14 bg-bg-secondary border border-white/5 rounded-2xl px-6 font-bold focus:outline-none focus:border-accent-primary transition-all outline-none appearance-none">
+                          <option value="low">Standard Speed</option>
+                          <option value="medium">Medium Priority</option>
+                          <option value="high">Urgent Growth</option>
                        </select>
                     </div>
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Message Detail / বিস্তারিত</label>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-secondary ml-1">Message Detail</label>
                     <textarea 
                       required
-                      placeholder="Explain your problem in detail..." 
-                      className="w-full h-48 bg-white/5 border border-white/5 rounded-[2rem] p-6 font-medium focus:outline-none focus:border-accent-primary transition-all outline-none resize-none"
+                      placeholder="Explain your situation in detail..." 
+                      className="w-full h-48 bg-bg-secondary border border-white/5 rounded-[2rem] p-6 font-medium focus:outline-none focus:border-accent-primary transition-all outline-none resize-none"
                     ></textarea>
                   </div>
 

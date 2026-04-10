@@ -46,10 +46,10 @@ const AdminOverview = () => {
       const pendingPayments = allPayments.filter(p => p.status === 'Pending').length;
 
       setStats([
-        { label: 'মোট রেভিনিউ', value: `৳ ${totalRevenue.toFixed(2)}`, icon: <TrendingUp className="text-emerald-500" />, bgColor: 'bg-emerald-500/10', trendUp: true, trend: '+Live' },
-        { label: 'মোট ইউজার', value: allUsers.length.toLocaleString(), icon: <Users className="text-blue-500" />, bgColor: 'bg-blue-500/10', trendUp: true, trend: `+${allUsers.length}` },
-        { label: 'পেন্ডিং অর্ডার', value: pendingOrders.toString(), icon: <ShoppingCart className="text-orange-500" />, bgColor: 'bg-orange-500/10', trendUp: false, trend: `${pendingOrders} Active` },
-        { label: 'পেন্ডিং পেমেন্ট', value: pendingPayments.toString(), icon: <CreditCard className="text-pink-500" />, bgColor: 'bg-pink-500/10', trendUp: true, trend: `${pendingPayments} New` },
+        { label: 'Total Revenue', value: `৳ ${totalRevenue.toFixed(2)}`, icon: <TrendingUp className="text-emerald-500" />, bgColor: 'bg-emerald-500/10', trendUp: true, trend: '+Live' },
+        { label: 'Total Clients', value: allUsers.length.toLocaleString(), icon: <Users className="text-blue-500" />, bgColor: 'bg-blue-500/10', trendUp: true, trend: `+${allUsers.length}` },
+        { label: 'Pending Orders', value: pendingOrders.toString(), icon: <ShoppingCart className="text-orange-500" />, bgColor: 'bg-orange-500/10', trendUp: false, trend: `${pendingOrders} Active` },
+        { label: 'Capital Requests', value: pendingPayments.toString(), icon: <CreditCard className="text-pink-500" />, bgColor: 'bg-pink-500/10', trendUp: true, trend: `${pendingPayments} New` },
       ]);
 
       setOrders(allOrders.slice(0, 10));
@@ -135,13 +135,13 @@ const AdminOverview = () => {
             <table>
               <thead>
                 <tr>
-                  <th className="py-5">Order ID</th>
-                  <th>ইউজার</th>
-                  <th>সার্ভিস</th>
-                  <th>পরিমান</th>
-                  <th>চার্জ</th>
-                  <th className="w-32">স্ট্যাটাস</th>
-                  <th className="text-right pr-8">একশন</th>
+                  <th className="py-6 px-10">Reference ID</th>
+                  <th>Client</th>
+                  <th>Package Name</th>
+                  <th>Quantity</th>
+                  <th>Charge</th>
+                  <th className="w-32">Integrity</th>
+                  <th className="text-right pr-10">Operations</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">

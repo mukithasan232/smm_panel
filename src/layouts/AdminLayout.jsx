@@ -52,7 +52,7 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-bg-primary text-white flex">
+    <div className="h-screen bg-bg-primary text-white flex overflow-hidden">
       {/* Background Orbs */}
       <div className="bg-animation">
         <div className="orb w-96 h-96 bg-accent-primary/10 top-[-10%] left-[-10%]"></div>
@@ -60,13 +60,13 @@ const AdminLayout = () => {
       </div>
 
       {/* Sidebar - Desktop */}
-      <aside className="fixed left-0 top-0 h-full w-[280px] bg-bg-secondary/60 backdrop-blur-xl border-r border-glass-border hidden lg:flex flex-col p-8 z-50">
+      <aside className="fixed inset-y-0 left-0 w-[280px] bg-bg-secondary/60 backdrop-blur-xl border-r border-glass-border hidden lg:flex lg:static shrink-0 flex-col p-8 z-50">
         <div className="flex flex-col h-full">
           <div className="flex items-center gap-3 mb-10 px-2 flex-shrink-0">
             <div className="p-2.5 bg-accent-primary rounded-xl shadow-lg shadow-accent-primary/20">
-              <Shield className="text-white w-6 h-6" />
+              <TrendingUp className="text-white w-6 h-6" />
             </div>
-            <span className="text-2xl font-black tracking-tighter font-['Outfit']">Staff <span className="text-accent-primary">Panel</span></span>
+            <span className="text-2xl font-black tracking-tighter font-['Outfit']">SMM<span className="text-accent-primary">Gen</span> <span className="text-xs uppercase opacity-30 tracking-[0.3em] font-black ml-1">Staff</span></span>
           </div>
 
           <nav className="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
@@ -108,8 +108,8 @@ const AdminLayout = () => {
             >
               <div className="flex items-center justify-between mb-10 px-2">
                 <div className="flex items-center gap-2">
-                  <Shield className="text-accent-primary w-6 h-6" />
-                  <span className="text-xl font-bold tracking-tight">Staff Panel</span>
+                  <TrendingUp className="text-accent-primary w-6 h-6" />
+                  <span className="text-xl font-black tracking-tighter">SMM<span className="text-accent-primary">Gen</span></span>
                 </div>
                 <button 
                   onClick={() => setIsSidebarOpen(false)} 
@@ -128,23 +128,28 @@ const AdminLayout = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex-1 lg:ml-[280px] w-full min-h-screen relative">
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
         {/* Top Header */}
-        <header className="fixed top-0 right-0 left-0 lg:left-[280px] h-20 bg-bg-primary/80 backdrop-blur-2xl border-b border-glass-border flex items-center justify-between px-6 md:px-10 z-[40]">
-          <div className="flex items-center gap-4">
+        <header className="sticky top-0 bg-bg-primary/95 backdrop-blur-2xl border-b border-glass-border flex items-center justify-between px-6 md:px-10 z-[100] h-20 shrink-0">
+          <div className="flex items-center gap-6">
             <button 
               onClick={() => setIsSidebarOpen(true)}
               className="lg:hidden p-2 -ml-2 text-secondary hover:text-white transition-colors"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-xl font-black font-['Outfit'] hidden md:block tracking-tight uppercase">Dashboard Overview</h1>
+            <div className="hidden lg:block">
+              <h1 className="text-xl font-black font-['Outfit'] tracking-tight uppercase flex items-center gap-3">
+                <LayoutDashboard className="w-5 h-5 text-accent-primary" />
+                Dashboard Overview
+              </h1>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-6">
-            <div className="hidden sm:flex items-center gap-2.5 px-4 py-1.5 bg-accent-primary/10 rounded-full border border-accent-primary/30">
-              <div className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse"></div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-accent-primary leading-none">Management Mode</span>
+          <div className="flex items-center gap-4 md:gap-8">
+            <div className="hidden md:flex items-center gap-2.5 px-4 py-2 bg-accent-primary/5 rounded-2xl border border-accent-primary/20">
+              <div className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent-primary leading-none">Management Mode</span>
             </div>
             
             <div className="flex items-center gap-4 relative">
@@ -197,8 +202,10 @@ const AdminLayout = () => {
         </header>
 
         {/* Dynamic Content Area */}
-        <main className="pt-32 pb-16 px-6 md:px-10 max-w-[1600px] mx-auto min-h-screen">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto py-10 px-6 md:px-10 custom-scrollbar relative z-0">
+          <div className="max-w-[1600px] mx-auto w-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

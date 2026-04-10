@@ -44,8 +44,8 @@ const Services = () => {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-         <h1 className="text-3xl font-bold mb-2 font-['Outfit']">Service List</h1>
-         <p className="text-neutral-400 text-sm">Browse our full range of SMM services across all platforms.</p>
+         <h1 className="text-3xl font-black mb-2 font-['Outfit'] tracking-tighter uppercase">Service Intelligence</h1>
+         <p className="text-neutral-500 text-sm font-medium">Browse our full range of SMM solutions across all global social platforms.</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -53,8 +53,8 @@ const Services = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
             <input 
               type="text" 
-              placeholder="Search by name or ID..."
-              className="input-glass pl-12 bg-white/5 border-glass-border"
+              placeholder="Search by name or unique ID..."
+              className="input-glass pl-12 h-12 text-sm font-semibold"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

@@ -38,16 +38,16 @@ const ManageUsers = () => {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-2">
         <div>
-          <h1 className="text-3xl font-bold mb-1 font-['Outfit'] tracking-tight">ইউজার ম্যানেজমেন্ট</h1>
-          <p className="text-secondary text-sm">আপনার প্ল্যাটফর্মের সব ইউজারের তথ্য এখান থেকে নিয়ন্ত্রণ করুন।</p>
+          <h1 className="text-3xl font-black mb-2 font-['Outfit'] tracking-tighter uppercase">User Management</h1>
+          <p className="text-secondary text-sm font-medium">Manage and monitor all platform users from a single command center.</p>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary" />
             <input 
               type="text" 
-              placeholder="ইউজার নেম বা ইমেইল..." 
-              className="input-glass pl-10 py-2.5 text-xs"
+              placeholder="Search by name or email..." 
+              className="input-glass pl-10 h-12 text-sm font-bold"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -68,12 +68,12 @@ const ManageUsers = () => {
             <table>
               <thead>
                 <tr>
-                  <th>ইউজার আইডি</th>
-                  <th>নাম ও ইমেইল</th>
-                  <th>ব্যালেন্স</th>
-                  <th>রোল</th>
-                  <th>রেজিস্টার্ড</th>
-                  <th className="text-right">একশন</th>
+                  <th className="rounded-tl-2xl">Identity ID</th>
+                  <th>Client Details</th>
+                  <th>Wallet Balance</th>
+                  <th>Access Level</th>
+                  <th>Joined Date</th>
+                  <th className="text-right rounded-tr-2xl">Operations</th>
                 </tr>
               </thead>
               <tbody>

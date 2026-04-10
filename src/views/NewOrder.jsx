@@ -66,8 +66,12 @@ const NewOrder = () => {
   const [quantity, setQuantity] = useState('');
   const [link, setLink] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    setUserData(user);
+    
     const fetchServicesList = async () => {
       try {
         const response = await fetch('/api/services');
@@ -185,7 +189,7 @@ const NewOrder = () => {
             </div>
             <div className="bg-[#111827]/80 backdrop-blur-md border border-white/10 rounded-3xl p-6 flex flex-col items-end min-w-[200px] shadow-2xl">
                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">Total Balance</p>
-               <h2 className="text-3xl font-black text-white">৳ ১১০.৬৭</h2>
+               <h2 className="text-3xl font-black text-white">৳ {userData?.balance?.toFixed(2) || '0.00'}</h2>
             </div>
           </div>
         </div>

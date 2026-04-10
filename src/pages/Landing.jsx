@@ -212,13 +212,14 @@ const FeatureCard = ({ icon, title, desc, delay }) => (
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="group p-10 bg-white/5 border border-glass-border rounded-[2.5rem] hover:bg-white/10 hover:border-accent-primary/30 transition-all duration-500"
+    className="relative group p-10 bg-gradient-to-br from-accent-primary/10 to-transparent border border-accent-primary/30 rounded-[2.5rem] hover:bg-accent-primary/10 hover:border-accent-primary/60 hover:-translate-y-2 transition-all duration-500 shadow-[0_0_40px_rgba(124,77,255,0.15)] overflow-hidden"
   >
-    <div className="mb-8 w-16 h-16 bg-accent-primary/10 rounded-2xl flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all duration-500 shadow-inner">
+    <div className="absolute top-0 right-0 w-32 h-32 bg-accent-primary/20 blur-[50px] rounded-full group-hover:bg-accent-primary/40 transition-colors"></div>
+    <div className="mb-8 w-16 h-16 bg-accent-primary/20 rounded-2xl flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-white transition-all duration-500 shadow-inner relative z-10">
       {icon}
     </div>
-    <h3 className="text-2xl font-black mb-4 font-['Outfit'] tracking-tight">{title}</h3>
-    <p className="text-neutral-500 leading-relaxed font-medium">{desc}</p>
+    <h3 className="text-2xl font-black mb-4 font-['Outfit'] tracking-tight relative z-10">{title}</h3>
+    <p className="text-neutral-400 leading-relaxed font-medium relative z-10">{desc}</p>
   </motion.div>
 );
 
