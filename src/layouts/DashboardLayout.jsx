@@ -97,9 +97,9 @@ const DashboardLayout = () => {
       </AnimatePresence>
 
       <aside className={`
-        fixed inset-y-0 left-0 z-[200] bg-slate-900/95 backdrop-blur-3xl border-r border-white/5 flex flex-col transition-all duration-300
-        ${isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'}
-        ${isSidebarCollapsed ? 'lg:w-24' : 'lg:w-72'}
+        fixed inset-y-0 left-0 z-[200] bg-slate-900/95 backdrop-blur-3xl border-r border-white/10 flex flex-col transition-all duration-300
+        ${isSidebarCollapsed ? 'w-24' : 'w-72'}
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div className="flex flex-col h-full relative p-6">
           {/* Logo Section */}
@@ -172,11 +172,14 @@ const DashboardLayout = () => {
 
       {/* Main Content Area */}
       <div className={`
-        flex-1 flex flex-col min-w-0 transition-all duration-300
-        ${isSidebarCollapsed ? 'lg:pl-24' : 'lg:pl-72'}
+        flex-1 flex flex-col min-w-0 min-h-screen transition-all duration-300
+        ${isSidebarCollapsed ? 'lg:ml-24' : 'lg:ml-72'}
       `}>
         {/* Top Header */}
-        <header className="sticky top-0 h-20 bg-[#111827]/60 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-6 z-[100]">
+        <header className={`
+          fixed top-0 right-0 h-20 bg-[#111827]/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-6 z-[100] transition-all duration-300
+          left-0 ${isSidebarCollapsed ? 'lg:left-24' : 'lg:left-72'}
+        `}>
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(true)}
@@ -265,7 +268,7 @@ const DashboardLayout = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 pt-24 custom-scrollbar">
           <div className="max-w-7xl mx-auto w-full">
             <Outlet />
           </div>
