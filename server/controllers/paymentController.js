@@ -41,7 +41,7 @@ exports.getMyPayments = async (req, res) => {
     res.status(200).json({
       success: true,
       count: transactions.length,
-      data: { transactions }
+      data: transactions
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -94,7 +94,7 @@ exports.getAllPayments = async (req, res) => {
     res.status(200).json({
       success: true,
       count: transactions.length,
-      data: { transactions }
+      data: transactions
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

@@ -86,7 +86,7 @@ exports.getMyOrders = async (req, res) => {
     res.status(200).json({
       success: true,
       count: orders.length,
-      data: { orders }
+      data: orders
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
@@ -101,7 +101,7 @@ exports.getAllOrders = async (req, res) => {
     res.status(200).json({
       success: true,
       count: orders.length,
-      data: { orders }
+      data: orders
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
