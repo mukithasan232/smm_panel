@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CreditCard, 
@@ -16,6 +16,14 @@ import toast from 'react-hot-toast';
 const AddFunds = () => {
   const [selectedMethod, setSelectedMethod] = useState('bkash');
   const [loading, setLoading] = useState(false);
+  const [amount, setAmount] = useState('');
+  const [transactionId, setTransactionId] = useState('');
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (user?.balance !== undefined) setBalance(user.balance);
+  }, []);
 
   const methods = [
     { 
@@ -48,14 +56,39 @@ const AddFunds = () => {
 
   const handleVerify = async (e) => {
     e.preventDefault();
+    if (!amount || !transactionId) {
+      toast.error('পরিমান ও Transaction ID দিন।');
+      return;
+    }
     setLoading(true);
-    const verifyToast = toast.loading('ভেরিফিকেশন রিকোয়েস্ট পাঠানো হচ্ছে...');
-    
-    // Simulate API call
-    setTimeout(() => {
-      toast.success('রিকোয়েস্ট সফল হয়েছে! অ্যাডমিন প্যানেল চেক করা হচ্ছে।', { id: verifyToast });
+    const verifyToast = toast.loading('রিকোয়েস্ট পাঠানো হচ্ছে...');
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/payments/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          method: currentMethod?.name,
+          amount: parseFloat(amount),
+          transactionId
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('রিকোয়েস্ট পাঠানো হয়েছে! অ্যাডমিন শীঘ্রই এপ্রুভ করবেন।', { id: verifyToast });
+        setAmount('');
+        setTransactionId('');
+      } else {
+        toast.error(data.message || 'রিকোয়েস্ট ব্যর্থ হয়েছে।', { id: verifyToast });
+      }
+    } catch (err) {
+      toast.error('সার্ভারের সাথে যোগাযোগ করা সম্ভব হয়নি।', { id: verifyToast });
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -71,7 +104,7 @@ const AddFunds = () => {
            </div>
            <div>
               <p className="text-[10px] font-black uppercase text-secondary tracking-widest leading-none mb-1">Current Balance</p>
-              <p className="text-xl font-black font-['Outfit'] tracking-tight">৳ ৮৫০.০০</p>
+              <p className="text-xl font-black font-['Outfit'] tracking-tight">৳ {balance.toFixed(2)}</p>
            </div>
         </div>
       </div>
@@ -118,7 +151,7 @@ const AddFunds = () => {
               <div 
                 className="absolute inset-0 opacity-20 blur-3xl pointer-events-none" 
                 style={{ backgroundColor: currentMethod.color }}
-              ></div>
+              />
               <div className="relative glass border-white/10 rounded-[2.5rem] p-10 flex flex-col md:flex-row justify-between items-center gap-10 shadow-3xl">
                 <div className="space-y-4 text-center md:text-left">
                    <div className="flex items-center justify-center md:justify-start gap-3">
@@ -129,7 +162,6 @@ const AddFunds = () => {
                    <p className="text-secondary font-medium italic">"Send Money to this number and verify below"</p>
                 </div>
                 <div className="w-40 h-40 bg-white/5 rounded-3xl border border-white/10 flex items-center justify-center p-4">
-                    {/* Placeholder for QR Code */}
                     <div className="w-full h-full border-2 border-dashed border-white/20 rounded-2xl flex items-center justify-center text-[10px] text-center uppercase tracking-widest font-black text-secondary">
                         QR CODE<br/>COMING SOON
                     </div>
@@ -139,7 +171,7 @@ const AddFunds = () => {
           </AnimatePresence>
 
           {/* Payment Instructions */}
-          <div className="glass border-white/5 rounded-3.5xl p-8 grid md:grid-cols-3 gap-8 relative overflow-hidden">
+          <div className="glass border-white/5 rounded-3xl p-8 grid md:grid-cols-3 gap-8 relative overflow-hidden">
              <div className="md:col-span-3 pb-4 border-b border-white/5 flex items-center gap-3">
                 <ShieldCheck className="w-6 h-6 text-emerald-500" />
                 <h3 className="text-lg font-black font-['Outfit'] uppercase tracking-tight">Payment Security Guidelines</h3>
@@ -161,7 +193,7 @@ const AddFunds = () => {
         {/* Verification Sidebar Form */}
         <div className="lg:col-span-2">
            <div className="sticky top-32 glass border-accent-primary/20 rounded-[3rem] p-10 space-y-8 shadow-2xl relative">
-              <div className="absolute top-0 right-10 w-20 h-20 bg-accent-primary/10 blur-3xl rounded-full"></div>
+              <div className="absolute top-0 right-10 w-20 h-20 bg-accent-primary/10 blur-3xl rounded-full" />
               
               <div>
                 <h3 className="text-2xl font-black font-['Outfit'] tracking-tight mb-2 uppercase">Verify Deposit</h3>
@@ -176,6 +208,8 @@ const AddFunds = () => {
                          type="number" 
                          required
                          placeholder="e.g. 500"
+                         value={amount}
+                         onChange={(e) => setAmount(e.target.value)}
                          className="w-full h-16 bg-white/5 border border-white/5 rounded-2xl px-6 font-['Outfit'] text-2xl font-black focus:outline-none focus:border-accent-primary focus:bg-accent-primary/5 transition-all outline-none placeholder:text-neutral-700" 
                        />
                        <Zap className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-accent-primary transition-colors" />
@@ -188,20 +222,25 @@ const AddFunds = () => {
                       type="text" 
                       required
                       placeholder="8X7Y6Z..."
+                      value={transactionId}
+                      onChange={(e) => setTransactionId(e.target.value.toUpperCase())}
                       className="w-full h-16 bg-white/5 border border-white/5 rounded-2xl px-6 font-mono font-bold tracking-widest focus:outline-none focus:border-accent-primary focus:bg-accent-primary/5 transition-all outline-none placeholder:text-neutral-700 uppercase" 
                     />
                  </div>
 
-                 <div className="bg-accent-primary/5 p-5 rounded-2.5xl border border-accent-primary/10 flex gap-4">
+                 <div className="bg-accent-primary/5 p-5 rounded-2xl border border-accent-primary/10 flex gap-4">
                     <HelpCircle className="w-5 h-5 text-accent-primary flex-shrink-0 mt-0.5" />
                     <p className="text-[11px] text-accent-primary font-bold leading-relaxed uppercase tracking-wider">Payments are verified manually by our finance team to ensure maximum security.</p>
                  </div>
 
                  <button 
                   disabled={loading}
-                  className="w-full h-16 bg-accent-primary hover:bg-accent-primary/90 text-white rounded-2.5xl font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-accent-primary/20 flex items-center justify-center gap-3 disabled:opacity-50"
+                  className="w-full h-16 bg-accent-primary hover:bg-accent-primary/90 text-white rounded-2xl font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-accent-primary/20 flex items-center justify-center gap-3 disabled:opacity-50"
                  >
-                   {loading ? <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}><Zap/></motion.div> : <><CheckCircle2 className="w-5 h-5" /> Submit Request</>}
+                   {loading 
+                     ? <><Clock className="w-5 h-5 animate-spin" /> Processing...</>
+                     : <><CheckCircle2 className="w-5 h-5" /> Submit Request</>
+                   }
                  </button>
               </form>
            </div>

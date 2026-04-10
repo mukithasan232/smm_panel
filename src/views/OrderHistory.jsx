@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ClipboardList, 
@@ -12,35 +12,32 @@ import {
 } from 'lucide-react';
 
 const OrderHistory = () => {
-  const orders = [
-    { 
-      id: 5042, 
-      date: 'Apr 10, 2026', 
-      time: '18:24', 
-      service: 'Facebook Page Followers', 
-      amount: '1,000', 
-      charge: '৳ ১২০.৫০', 
-      status: 'Completed' 
-    },
-    { 
-      id: 5041, 
-      date: 'Apr 10, 2026', 
-      time: '15:10', 
-      service: 'Instagram Likes (Targeted)', 
-      amount: '৫০০', 
-      charge: '৳ ৫০.০০', 
-      status: 'Pending' 
-    },
-    { 
-      id: 5040, 
-      date: 'Apr 09, 2026', 
-      time: '22:45', 
-      service: 'TikTok Views (High Quality)', 
-      amount: '৫,০০০', 
-      charge: '৳ ৮০.০০', 
-      status: 'In Progress' 
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('/api/orders/my-orders', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) setOrders(data.data || []);
+      } catch (err) {
+        console.error('Order fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const filtered = orders.filter(o =>
+    o._id?.includes(search) ||
+    o.serviceName?.toLowerCase().includes(search.toLowerCase())
+  );
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -80,6 +77,8 @@ const OrderHistory = () => {
                 type="text" 
                 placeholder="Search by ID or Service Name..." 
                 className="w-full h-16 bg-[#1f2937]/40 backdrop-blur-md border border-white/5 rounded-2xl pl-14 pr-6 text-sm focus:outline-none focus:border-accent-primary focus:ring-4 focus:ring-accent-primary/10 transition-all placeholder:text-neutral-700 font-bold text-white shadow-xl"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
            </div>
            <button className="w-16 h-16 rounded-2xl bg-[#1f2937]/40 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-all text-neutral-400 hover:text-white shadow-xl">
@@ -96,15 +95,23 @@ const OrderHistory = () => {
                 <th className="py-8 px-10 tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase text-left">Reference ID</th>
                 <th className="tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase text-left">Service details</th>
                 <th className="tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase text-left">Order Size</th>
-                <th className="tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase text-left">Unit Charge</th>
+                <th className="tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase text-left">Charge</th>
                 <th className="tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase text-left">Current Status</th>
                 <th className="text-right pr-10 tracking-[0.2em] font-black text-[10px] text-neutral-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.03]">
-              {orders.map((order, idx) => (
+              {loading ? (
+                <tr><td colSpan={6} className="py-20 text-center">
+                  <div className="w-8 h-8 border-4 border-accent-primary/20 border-t-accent-primary rounded-full animate-spin mx-auto" />
+                </td></tr>
+              ) : filtered.length === 0 ? (
+                <tr><td colSpan={6} className="py-20 text-center text-secondary font-medium">
+                  {search ? 'কোনো ফলাফল পাওয়া যায়নি।' : 'আপনার এখনো কোনো অর্ডার নেই।'}
+                </td></tr>
+              ) : filtered.map((order, idx) => (
                 <motion.tr 
-                  key={order.id}
+                  key={order._id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
@@ -112,8 +119,10 @@ const OrderHistory = () => {
                 >
                   <td className="py-8 px-10">
                     <div className="flex flex-col">
-                       <span className="text-accent-primary font-black text-xl leading-none mb-2 tabular-nums">#{order.id}</span>
-                       <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest">{order.date} • {order.time}</span>
+                       <span className="text-accent-primary font-black text-xl leading-none mb-2 tabular-nums">#{order._id?.slice(-5).toUpperCase()}</span>
+                       <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest">
+                         {new Date(order.createdAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
+                       </span>
                     </div>
                   </td>
                   <td>
@@ -121,14 +130,14 @@ const OrderHistory = () => {
                        <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 group-hover:border-accent-primary/40 transition-all shadow-inner">
                           <ClipboardList className="w-5 h-5 text-neutral-600 group-hover:text-accent-primary transition-colors" />
                        </div>
-                       <span className="font-bold text-sm tracking-tight text-white">{order.service}</span>
+                       <span className="font-bold text-sm tracking-tight text-white max-w-[200px] truncate">{order.serviceName || order.serviceId}</span>
                     </div>
                   </td>
                   <td>
-                    <span className="font-black text-neutral-400 tabular-nums">{order.amount}</span>
+                    <span className="font-black text-neutral-400 tabular-nums">{order.quantity?.toLocaleString()}</span>
                   </td>
                   <td>
-                    <span className="text-lg font-black tracking-tight text-white tabular-nums">{order.charge}</span>
+                    <span className="text-lg font-black tracking-tight text-white tabular-nums">৳ {order.charge?.toFixed(2)}</span>
                   </td>
                   <td>
                     <div className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest leading-none shadow-sm ${getStatusColor(order.status)}`}>
