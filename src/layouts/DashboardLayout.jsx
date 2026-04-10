@@ -154,7 +154,13 @@ const DashboardLayout = () => {
               {!isSidebarCollapsed && <span>Collapse Menu</span>}
             </button>
             
-            <button className={`
+            <button 
+              onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                navigate('/login');
+              }}
+              className={`
               flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-all
               ${isSidebarCollapsed ? 'justify-center' : ''}
             `}>
@@ -241,7 +247,12 @@ const DashboardLayout = () => {
                         </button>
                         <div className="my-2 border-t border-glass-border" />
                         <button 
-                          onClick={() => { setIsProfileOpen(false); navigate('/'); }} 
+                          onClick={() => { 
+                             setIsProfileOpen(false);
+                             localStorage.removeItem('token');
+                             localStorage.removeItem('user');
+                             navigate('/login'); 
+                          }} 
                           className="dropdown-item text-red-400 hover:bg-red-500/10 hover:text-red-300"
                         >
                           <LogOut className="w-4 h-4" /> Sign Out

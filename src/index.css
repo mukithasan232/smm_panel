@@ -281,12 +281,7 @@ h1, h2, h3, h4 {
   box-shadow: var(--neon-glow);
 }
 
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
+
 /* Form & Dashboard Utilities */
 .input-glass, .select-glass {
   width: 100%;

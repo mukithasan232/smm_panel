@@ -75,7 +75,11 @@ const AdminLayout = () => {
 
           <div className="pt-6 mt-6 border-t border-glass-border flex-shrink-0">
             <button 
-              onClick={() => navigate('/')}
+              onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                navigate('/login');
+              }}
               className="sidebar-link w-full text-red-400 hover:text-red-300 hover:bg-red-500/10"
             >
               <LogOut className="w-5 h-5" />
@@ -174,7 +178,12 @@ const AdminLayout = () => {
                         <User className="w-4 h-4" /> প্রোফাইল সেটিংস
                       </button>
                       <button 
-                        onClick={() => { setIsProfileOpen(false); navigate('/'); }} 
+                        onClick={() => { 
+                          setIsProfileOpen(false); 
+                          localStorage.removeItem('token');
+                          localStorage.removeItem('user');
+                          navigate('/login'); 
+                        }} 
                         className="dropdown-item text-red-400 hover:bg-red-500/10 hover:text-red-300 mt-2"
                       >
                         <LogOut className="w-4 h-4" /> সাইন আউট
