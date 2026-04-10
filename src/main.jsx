@@ -10,8 +10,14 @@ import App from './App.jsx'
 const originalFetch = window.fetch;
 window.fetch = async (...args) => {
   let [resource, config] = args;
-  if (typeof resource === 'string' && resource.startsWith('/api')) {
-    resource = __API_URL__ + resource;
+  try {
+    const apiUrl = typeof __API_URL__ !== 'undefined' ? __API_URL__ : '';
+    if (typeof resource === 'string' && resource.startsWith('/api')) {
+      const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+      resource = baseUrl + resource;
+    }
+  } catch (err) {
+    console.error('Fetch intercept error:', err);
   }
   return originalFetch(resource, config);
 };
