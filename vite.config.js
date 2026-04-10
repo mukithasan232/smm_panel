@@ -16,4 +16,8 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    // Expose the backend URL to frontend code
+    __API_URL__: JSON.stringify(process.env.VITE_API_URL || ''),
+  },
 })
