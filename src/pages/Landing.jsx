@@ -24,8 +24,8 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${scrolled ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/5 py-3' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+    <nav className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${scrolled ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/5 h-16' : 'bg-transparent h-20'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center h-full">
         <Link to="/" className="flex items-center gap-3 group">
            <div className="w-11 h-11 bg-accent-primary rounded-2xl flex items-center justify-center shadow-2xl shadow-accent-primary/20 group-hover:rotate-12 transition-transform">
               <TrendingUp className="text-white w-6 h-6" />
@@ -60,7 +60,7 @@ const Landing = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-48 pb-32 overflow-hidden">
+      <section className="relative pt-32 md:pt-40 pb-32 overflow-hidden" style={{ marginTop: '80px' }}>
          {/* Background Glows */}
          <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-accent-primary/10 blur-[150px] rounded-full"></div>
          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#7c4dff]/5 blur-[120px] rounded-full"></div>
