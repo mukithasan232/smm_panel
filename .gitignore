@@ -31,3 +31,4 @@ Thumbs.db
 .vscode/
 .history/
 *.code-workspace
+.env*.local
