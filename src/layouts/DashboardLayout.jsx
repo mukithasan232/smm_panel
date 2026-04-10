@@ -121,7 +121,7 @@ const DashboardLayout = () => {
                   animate={{ opacity: 1, x: 0 }}
                   className="text-xl font-bold tracking-tight whitespace-nowrap"
                 >
-                  SMM<span className="text-accent-primary font-black">Gen</span>
+                  SMM<span className="text-accent-primary font-black">Grows</span>
                 </motion.span>
               )}
             </Link>

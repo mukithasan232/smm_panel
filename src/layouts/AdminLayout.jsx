@@ -66,7 +66,7 @@ const AdminLayout = () => {
             <div className="p-2.5 bg-accent-primary rounded-xl shadow-lg shadow-accent-primary/20">
               <TrendingUp className="text-white w-6 h-6" />
             </div>
-            <span className="text-2xl font-black tracking-tighter font-['Outfit']">SMM<span className="text-accent-primary">Gen</span> <span className="text-xs uppercase opacity-30 tracking-[0.3em] font-black ml-1">Staff</span></span>
+            <span className="text-2xl font-black tracking-tighter font-['Outfit']">SMM<span className="text-accent-primary">Grows</span> <span className="text-xs uppercase opacity-30 tracking-[0.3em] font-black ml-1">Staff</span></span>
           </div>
 
           <nav className="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
@@ -109,7 +109,7 @@ const AdminLayout = () => {
               <div className="flex items-center justify-between mb-10 px-2">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="text-accent-primary w-6 h-6" />
-                  <span className="text-xl font-black tracking-tighter">SMM<span className="text-accent-primary">Gen</span></span>
+                  <span className="text-xl font-black tracking-tighter">SMM<span className="text-accent-primary">Grows</span></span>
                 </div>
                 <button 
                   onClick={() => setIsSidebarOpen(false)} 

@@ -227,7 +227,7 @@ const Auth = () => {
 
       <footer className="p-10 text-center relative z-10 text-neutral-600 shrink-0 bg-transparent">
          <p className="text-[10px] font-black uppercase tracking-[0.4em]">
-           &copy; {new Date().getFullYear()} SMMGEN WORLDWIDE • PREMIUM AUTHENTICATION
+           &copy; {new Date().getFullYear()} SMM GROWS WORLDWIDE • PREMIUM AUTHENTICATION
          </p>
       </footer>
     </div>

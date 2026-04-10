@@ -30,7 +30,7 @@ const Navbar = () => {
            <div className="w-11 h-11 bg-accent-primary rounded-2xl flex items-center justify-center shadow-2xl shadow-accent-primary/20 group-hover:rotate-12 transition-transform">
               <TrendingUp className="text-white w-6 h-6" />
            </div>
-           <span className="text-2xl font-black tracking-tight font-['Outfit'] text-white">SMM<span className="text-accent-primary">Gen</span></span>
+           <span className="text-2xl font-black tracking-tight font-['Outfit'] text-white">SMM<span className="text-accent-primary">Grows</span></span>
         </Link>
 
         {/* Desktop Menu */}
@@ -73,10 +73,10 @@ const Landing = () => {
                </div>
                
                <h1 className="text-6xl md:text-8xl font-black font-['Outfit'] tracking-tighter leading-[0.9] mb-8">
-                 Elite <span className="text-accent-primary">SMM Panel</span> <br/> for Global <br/> Growth.
+                 Best <span className="text-accent-primary">SMM Panel</span> <br/> in Bangladesh <br/> & Asia.
                </h1>
                <p className="text-neutral-500 text-lg font-medium leading-relaxed max-w-xl mb-12">
-                 Join 50k+ elite vendors using SMMGen to scale their social presence. The fastest, cheapest, and most secure automated growth engine.
+                 Join 50k+ elite vendors using SMM Grows to scale their social presence. The fastest, cheapest, and most secure automated growth engine for BD and beyond.
                </p>
 
                {/* Integrated Login Box */}
@@ -169,10 +169,10 @@ const Landing = () => {
                   <div className="w-12 h-12 bg-accent-primary rounded-2xl flex items-center justify-center shadow-xl shadow-accent-primary/20">
                      <TrendingUp className="text-white w-6 h-6" />
                   </div>
-                  <span className="text-3xl font-black font-['Outfit'] tracking-tighter">SMM<span className="text-accent-primary">Gen</span></span>
+                  <span className="text-3xl font-black font-['Outfit'] tracking-tighter">SMM<span className="text-accent-primary">Grows</span></span>
                </Link>
                <p className="text-neutral-500 text-sm font-medium leading-relaxed max-w-sm">
-                  The world's most advanced SMM infrastructure providers. We power growth for over 50,000 businesses worldwide through automation and elite networking.
+                  The world's most advanced SMM infrastructure providers in Bangladesh and Asia. We power growth for over 50,000 businesses worldwide through automation and elite networking.
                </p>
                <div className="flex gap-4">
                   {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
@@ -218,7 +218,7 @@ const Landing = () => {
          </div>
 
          <div className="max-w-7xl mx-auto px-6 mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-[10px] font-bold text-neutral-700 uppercase tracking-[0.4em]">&copy; 2026 SMMGen Network • Global Elite HQ</p>
+            <p className="text-[10px] font-bold text-neutral-700 uppercase tracking-[0.4em]">&copy; 2026 SMM Grows Network • Global Elite HQ</p>
             <div className="flex items-center gap-8">
                <div className="flex items-center gap-2 text-[10px] font-bold text-neutral-700 uppercase tracking-[0.2em]"><Globe className="w-4 h-4" /> Bangladesh</div>
                <div className="flex items-center gap-2 text-[10px] font-bold text-neutral-700 uppercase tracking-[0.2em]"><Zap className="w-4 h-4" /> v4.0.2</div>

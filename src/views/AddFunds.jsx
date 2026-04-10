@@ -129,7 +129,7 @@ const AddFunds = () => {
               <div className="p-10 space-y-8" id="invoice-printable">
                 <div className="flex justify-between items-start">
                    <div>
-                      <h1 className="text-3xl font-black font-['Outfit'] tracking-tight text-indigo-600">SMMGEN</h1>
+                      <h1 className="text-3xl font-black font-['Outfit'] tracking-tight text-indigo-600 uppercase">SMM GROWS</h1>
                       <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Official Payment Receipt</p>
                    </div>
                    <div className="text-right">
@@ -172,14 +172,14 @@ const AddFunds = () => {
                    <div className="flex justify-between items-center py-4">
                       <div>
                          <p className="font-bold text-lg">Wallet Top-up</p>
-                         <p className="text-xs text-slate-400">Credit added to SMMGen account</p>
+                         <p className="text-xs text-slate-400">Credit added to SMM Grows account</p>
                       </div>
                       <p className="text-2xl font-black font-['Outfit']">৳ {invoiceItem.amount.toFixed(2)}</p>
                    </div>
                 </div>
 
                 <div className="pt-10 flex justify-between items-center opacity-50">
-                   <p className="text-[10px] font-bold uppercase tracking-widest">smmgen.com - 2026</p>
+                   <p className="text-[10px] font-bold uppercase tracking-widest">smmgrows.com - 2026</p>
                    <div className="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
                       <Check className="w-5 h-5" />
                    </div>

@@ -1,6 +1,6 @@
-# 🚀 SMMGen - Premium SMM Reseller Panel
+# 🚀 SMM Grows - Premium SMM Reseller Panel
 
-SMMGen is a high-performance, production-ready SMM (Social Media Marketing) reseller platform. Built with a modern SaaS aesthetic, it provides a seamless experience for both users and administrators to manage social growth services.
+SMM Grows is a high-performance, production-ready SMM (Social Media Marketing) reseller platform. Built with a modern SaaS aesthetic, it provides a seamless experience for both users and administrators to manage social growth services.
 
 **Live Demo:** [https://www.smmgrows.com](https://www.smmgrows.com)
 
@@ -10,7 +10,7 @@ SMMGen is a high-performance, production-ready SMM (Social Media Marketing) rese
 
 ### 👤 User Interface
 - **Elite Dashboard**: Premium glassmorphism UI with real-time stats (Balance, Total Spend, Order Count).
-- **Service Catalogue**: Instant access to SMMGen API services with automated category filtering.
+- **Service Catalogue**: Instant access to SMM Grows API services with automated category filtering.
 - **Smart Order System**: 1-click order placement with automatic charge calculation in BDT.
 - **Real-Time Sync**: Manual "Sync Status" button to fetch live order progress from the provider.
 - **Wallet System**: Support for bKash, Nagad, and Rocket with automated invoice generation (PDF/Print).
@@ -18,7 +18,7 @@ SMMGen is a high-performance, production-ready SMM (Social Media Marketing) rese
 ### 🛠️ Administration
 - **Global Financial Control**: Built-in 30% profit margin logic applied automatically to all API services.
 - **Payment Verification**: Dedicated Super-Admin panel for approving/rejecting funding requests.
-- **Provider Management**: Real-time monitoring of SMMGen API wallet balance (USD/BDT).
+- **Provider Management**: Real-time monitoring of SMM Grows API wallet balance (USD/BDT).
 - **Security**: Specific email-gated authentication for high-privilege financial actions.
 
 ---
@@ -83,4 +83,4 @@ npm run dev
 Distributed under the MIT License. For support, contact your Administrator via the Support Center in the dashboard.
 
 ---
-*Built for excellence by the SMM Elite BD Team.*
+*Built for excellence by the SMM Grows Team.*
