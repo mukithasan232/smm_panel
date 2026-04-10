@@ -24,15 +24,17 @@ const AdminOverview = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [ordersRes, usersRes, paymentsRes] = await Promise.all([
+      const [ordersRes, usersRes, paymentsRes, balanceRes] = await Promise.all([
         fetch('/api/orders', { headers }),
         fetch('/api/users', { headers }),
         fetch('/api/payments', { headers }),
+        fetch('/api/services/provider-balance', { headers }),
       ]);
 
       const ordersData = await ordersRes.json();
       const usersData = await usersRes.json();
       const paymentsData = await paymentsRes.json();
+      const balanceData = await balanceRes.json();
 
       const allOrders = ordersData.success ? ordersData.data : [];
       const allUsers = usersData.success ? usersData.data : [];
@@ -46,10 +48,11 @@ const AdminOverview = () => {
       const pendingPayments = allPayments.filter(p => p.status === 'Pending').length;
 
       setStats([
-        { label: 'Total Revenue', value: `৳ ${totalRevenue.toFixed(2)}`, icon: <TrendingUp className="text-emerald-500" />, bgColor: 'bg-emerald-500/10', trendUp: true, trend: '+Live' },
+        { label: 'Platform Revenue', value: `৳ ${totalRevenue.toFixed(2)}`, icon: <TrendingUp className="text-emerald-500" />, bgColor: 'bg-emerald-500/10', trendUp: true, trend: 'Net' },
         { label: 'Total Clients', value: allUsers.length.toLocaleString(), icon: <Users className="text-blue-500" />, bgColor: 'bg-blue-500/10', trendUp: true, trend: `+${allUsers.length}` },
-        { label: 'Pending Orders', value: pendingOrders.toString(), icon: <ShoppingCart className="text-orange-500" />, bgColor: 'bg-orange-500/10', trendUp: false, trend: `${pendingOrders} Active` },
-        { label: 'Capital Requests', value: pendingPayments.toString(), icon: <CreditCard className="text-pink-500" />, bgColor: 'bg-pink-500/10', trendUp: true, trend: `${pendingPayments} New` },
+        { label: 'Active Pipeline', value: pendingOrders.toString(), icon: <ShoppingCart className="text-orange-500" />, bgColor: 'bg-orange-500/10', trendUp: false, trend: 'Queue' },
+        { label: 'Funding Requests', value: pendingPayments.toString(), icon: <CreditCard className="text-pink-500" />, bgColor: 'bg-pink-500/10', trendUp: true, trend: `${pendingPayments} New` },
+        { label: 'SMMGen Capital', value: `$ ${balanceData.data?.balance || '0.00'}`, icon: <RefreshCw className="text-purple-500" />, bgColor: 'bg-purple-500/10', trendUp: true, trend: 'API Wallet' },
       ]);
 
       setOrders(allOrders.slice(0, 10));
@@ -95,7 +98,7 @@ const AdminOverview = () => {
   return (
     <div className="space-y-10">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {stats?.map((stat, idx) => (
           <motion.div 
             key={idx}
@@ -122,8 +125,8 @@ const AdminOverview = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-end px-2">
           <div>
-            <span className="text-accent-primary text-[10px] uppercase font-black tracking-[0.3em] mb-2 block leading-none">Global Log</span>
-            <h2 className="text-4xl font-black font-['Outfit'] tracking-tighter">Recent Orders</h2>
+            <span className="text-accent-primary text-[10px] uppercase font-black tracking-[0.3em] mb-2 block leading-none">Management Log</span>
+            <h2 className="text-4xl font-black font-['Outfit'] tracking-tighter">API Execution Queue</h2>
           </div>
           <button onClick={fetchData} className="px-6 py-2.5 rounded-xl border border-glass-border hover:border-accent-primary text-xs font-bold transition-all hover:bg-accent-primary/10 flex items-center gap-2">
             <RefreshCw className="w-3 h-3" /> Refresh
@@ -140,7 +143,7 @@ const AdminOverview = () => {
                   <th>Package Name</th>
                   <th>Quantity</th>
                   <th>Charge</th>
-                  <th className="w-32">Integrity</th>
+                  <th className="w-32">Order Status</th>
                   <th className="text-right pr-10">Operations</th>
                 </tr>
               </thead>

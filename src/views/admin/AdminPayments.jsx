@@ -8,6 +8,7 @@ const AdminPayments = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [processing, setProcessing] = useState(null);
+  const [user, setUser] = useState(null);
 
   const fetchPayments = async () => {
     setLoading(true);
@@ -55,7 +56,11 @@ const AdminPayments = () => {
     }
   };
 
-  useEffect(() => { fetchPayments(); }, []);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user') || 'null');
+    setUser(userData);
+    fetchPayments(); 
+  }, []);
 
   const filtered = requests.filter(r => 
     r.transactionId?.toLowerCase().includes(search.toLowerCase()) ||
@@ -155,24 +160,30 @@ const AdminPayments = () => {
                       <td className="text-right">
                         {req.status === 'Pending' ? (
                           <div className="flex justify-end gap-2">
-                            <button 
-                              onClick={() => handleAction(req._id, 'Approved')}
-                              disabled={processing === req._id + 'Approved'}
-                              className="h-9 w-9 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all disabled:opacity-50"
-                            >
-                              {processing === req._id + 'Approved' 
-                                ? <Clock className="w-4 h-4 animate-spin" />
-                                : <Check className="w-4 h-4" />}
-                            </button>
-                            <button 
-                              onClick={() => handleAction(req._id, 'Rejected')}
-                              disabled={processing === req._id + 'Rejected'}
-                              className="h-9 w-9 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all disabled:opacity-50"
-                            >
-                              {processing === req._id + 'Rejected'
-                                ? <Clock className="w-4 h-4 animate-spin" />
-                                : <X className="w-4 h-4" />}
-                            </button>
+                            {(user?.email === 'mdmukithasan429@gmail.com' || user?.email === 'admin@demo.com') ? (
+                              <>
+                                <button 
+                                  onClick={() => handleAction(req._id, 'Approved')}
+                                  disabled={processing === req._id + 'Approved'}
+                                  className="h-9 w-9 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all disabled:opacity-50"
+                                >
+                                  {processing === req._id + 'Approved' 
+                                    ? <Clock className="w-4 h-4 animate-spin" />
+                                    : <Check className="w-4 h-4" />}
+                                </button>
+                                <button 
+                                  onClick={() => handleAction(req._id, 'Rejected')}
+                                  disabled={processing === req._id + 'Rejected'}
+                                  className="h-9 w-9 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all disabled:opacity-50"
+                                >
+                                  {processing === req._id + 'Rejected'
+                                    ? <Clock className="w-4 h-4 animate-spin" />
+                                    : <X className="w-4 h-4" />}
+                                </button>
+                              </>
+                            ) : (
+                              <span className="text-[10px] font-black uppercase tracking-widest text-secondary opacity-50">Admin Locked</span>
+                            )}
                           </div>
                         ) : (
                           <span className="text-xs text-secondary px-4">Done</span>

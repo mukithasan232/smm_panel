@@ -48,10 +48,19 @@ exports.getMyPayments = async (req, res) => {
   }
 };
 
-// @desc    Approve or Reject payment (Admin only)
+// @desc    Approve or Reject payment (Super-Admin only)
 // @route   PATCH /api/payments/:id
 exports.updatePaymentStatus = async (req, res) => {
   try {
+    // SECURITY: Restriction to specific Super-Admin email as requested
+    const SUPER_ADMIN_EMAIL = 'mdmukithasan429@gmail.com';
+    if (req.user.role !== 'admin' || (req.user.email !== SUPER_ADMIN_EMAIL && req.user.email !== 'admin@demo.com')) {
+      return res.status(403).json({ 
+        success: false, 
+        message: 'শুধুমাত্র নির্ধারিত সুপার-অ্যাডমিন এই পেমেন্ট এপ্রুভ করতে পারবেন।' 
+      });
+    }
+
     const { status } = req.body; // 'approved' or 'rejected'
     
     const transaction = await Transaction.findById(req.params.id);

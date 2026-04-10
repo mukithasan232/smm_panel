@@ -37,3 +37,21 @@ exports.getAllServices = async (req, res) => {
     });
   }
 };
+
+// @desc    Get SMMGen Provider Balance (Admin only)
+// @route   GET /api/services/provider-balance
+exports.getProviderBalance = async (req, res) => {
+  try {
+    const balanceData = await smmProvider.checkProviderBalance();
+    res.status(200).json({
+      success: true,
+      data: balanceData
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'সেবা প্রদানকারীর ব্যালেন্স আনতে সমস্যা হয়েছে।',
+      error: err.message
+    });
+  }
+};

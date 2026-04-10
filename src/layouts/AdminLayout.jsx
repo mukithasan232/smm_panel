@@ -202,7 +202,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Dynamic Content Area */}
-        <main className="flex-1 overflow-y-auto py-10 px-6 md:px-10 custom-scrollbar relative z-0">
+        <main className="flex-1 overflow-y-auto pt-14 pb-24 px-6 md:px-10 custom-scrollbar relative z-0">
           <div className="max-w-[1600px] mx-auto w-full">
             <Outlet />
           </div>

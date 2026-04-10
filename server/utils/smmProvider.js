@@ -164,8 +164,28 @@ const checkStatus = async (orderId) => {
   }
 };
 
+/**
+ * checkProviderBalance()
+ * ──────────────────────
+ * Fetches the current account balance from SMMGen.
+ *
+ * @returns {Promise<Object>} Balance object e.g. { balance: "102.54", currency: "USD" }
+ */
+const checkProviderBalance = async () => {
+  try {
+    const params = buildBaseParams('balance');
+    const response = await axios.post(process.env.SMMGEN_API_URL, params, {
+      timeout: 10000,
+    });
+    return response.data;
+  } catch (error) {
+    handleApiError(error, 'checkProviderBalance');
+  }
+};
+
 module.exports = {
   fetchServices,
   placeOrder,
   checkStatus,
+  checkProviderBalance,
 };
