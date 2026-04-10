@@ -96,9 +96,8 @@ const DashboardLayout = () => {
         )}
       </AnimatePresence>
 
-      {/* Sidebar - Desktop & Mobile Drawer */}
       <aside className={`
-        fixed inset-y-0 left-0 z-[200] bg-[#111827]/80 backdrop-blur-2xl border-r border-white/5 flex flex-col transition-all duration-300
+        fixed inset-y-0 left-0 z-[200] bg-slate-900/95 backdrop-blur-3xl border-r border-white/5 flex flex-col transition-all duration-300
         ${isSidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'}
         ${isSidebarCollapsed ? 'lg:w-24' : 'lg:w-72'}
       `}>

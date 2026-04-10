@@ -104,7 +104,7 @@ const AdminLayout = () => {
               initial={{ x: -280 }}
               animate={{ x: 0 }}
               exit={{ x: -280 }}
-              className="fixed left-0 top-0 h-full w-[280px] bg-bg-secondary border-r border-glass-border flex flex-col p-6 z-[70] lg:hidden"
+              className="fixed left-0 top-0 h-full w-[280px] bg-slate-900/95 backdrop-blur-2xl border-r border-glass-border flex flex-col p-6 z-[70] lg:hidden"
             >
               <div className="flex items-center justify-between mb-10 px-2">
                 <div className="flex items-center gap-2">

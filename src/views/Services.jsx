@@ -73,7 +73,7 @@ const Services = () => {
          </div>
       </div>
 
-      <div className="table-container glass border border-glass-border">
+      <div className="table-container glass border border-glass-border overflow-x-auto w-full">
          <table className="min-w-full">
             <thead>
                <tr>
@@ -89,10 +89,10 @@ const Services = () => {
                {filteredServices.slice(0, 100).map(s => (
                   <tr key={s.service}>
                      <td className="font-bold text-accent-primary">#{s.service}</td>
-                     <td>
+                     <td className="max-w-[150px] md:max-w-sm">
                         <div className="flex flex-col">
-                           <span className="font-semibold text-sm">{s.name}</span>
-                           <span className="text-[10px] text-neutral-500 uppercase tracking-wider">{s.category}</span>
+                           <span className="font-semibold text-sm truncate" title={s.name}>{s.name}</span>
+                           <span className="text-[10px] text-neutral-500 uppercase tracking-wider truncate" title={s.category}>{s.category}</span>
                         </div>
                      </td>
                      <td className="font-bold">৳ {s.rate}</td>
