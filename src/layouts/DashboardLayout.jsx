@@ -25,7 +25,9 @@ import {
   Send,
   Linkedin,
   Globe,
-  MessageSquare
+  MessageSquare,
+  FileText,
+  Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -132,6 +134,27 @@ const DashboardLayout = () => {
               <X className="w-6 h-6" />
             </button>
           </div>
+
+          {/* Profile Section */}
+          {!isSidebarCollapsed && (
+            <div className="mb-8 p-6 bg-white/5 rounded-[2rem] border border-white/5 relative overflow-hidden group">
+               <div className="absolute top-0 right-0 w-20 h-20 bg-accent-primary/5 blur-3xl -mr-10 -mt-10" />
+               <div className="flex flex-col items-center text-center">
+                  <div className="w-20 h-20 rounded-full border-4 border-white/5 p-1 mb-4 relative">
+                     <img 
+                       src="https://ui-avatars.com/api/?name=MK&background=6366F1&color=fff&bold=true" 
+                       className="w-full h-full rounded-full object-cover" 
+                       alt="Profile" 
+                     />
+                     <div className="absolute bottom-1 right-1 w-5 h-5 bg-emerald-500 rounded-full border-4 border-[#0F172A]" />
+                  </div>
+                  <div className="bg-accent-primary/20 text-accent-primary text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-accent-primary/20 mb-3">
+                    ৳ {userData?.balance?.toFixed(2) || '0.00'}
+                  </div>
+                  <p className="text-sm font-black truncate w-full">{userData?.name || 'maddoggamingbd'}</p>
+               </div>
+            </div>
+          )}
 
           {/* Navigation */}
           <nav className="flex-1 space-y-2 overflow-y-auto no-scrollbar -mx-2 px-2">
