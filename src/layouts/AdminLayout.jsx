@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom';
 import { 
   TrendingUp, 
@@ -30,7 +30,19 @@ const SidebarLink = ({ to, icon, label, onClick }) => (
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
   const navigate = useNavigate();
+
+  // Auth Guard: Admin only
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!token || !user || user.role !== 'admin') {
+      navigate('/login');
+    } else {
+      setAdminUser(user);
+    }
+  }, [navigate]);
 
   const menuItems = [
     { to: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'ওভারভিউ' },
@@ -155,7 +167,8 @@ const AdminLayout = () => {
                     >
                       <div className="px-4 py-3 border-b border-white/5 mb-2">
                         <p className="text-[10px] text-secondary uppercase tracking-[0.2em] font-black mb-1 leading-none">Administrator</p>
-                        <p className="text-sm font-bold truncate">admin@smmelitebd.com</p>
+                        <p className="text-sm font-bold truncate">{adminUser?.email || 'admin@smmelitebd.com'}</p>
+                        <p className="text-xs text-secondary">{adminUser?.name}</p>
                       </div>
                       <button onClick={() => setIsProfileOpen(false)} className="dropdown-item">
                         <User className="w-4 h-4" /> প্রোফাইল সেটিংস

@@ -13,6 +13,7 @@ const authRoutes = require('./routes/authRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
+const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorMiddleware');
 
 // Connect to database
@@ -37,6 +38,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/users', userRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

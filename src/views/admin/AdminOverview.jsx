@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   TrendingUp, 
@@ -7,38 +7,96 @@ import {
   CreditCard,
   ArrowUpRight,
   ArrowDownRight,
-  MoreVertical
+  MoreVertical,
+  RefreshCw
 } from 'lucide-react';
 
 const AdminOverview = () => {
-  const stats = [
-    { label: 'মোট রেভিনিউ', value: '৳ ৪৮,৪৫০.০০', icon: <TrendingUp className="text-emerald-500" />, trend: '+১২.৫%', trendUp: true, bgColor: 'bg-emerald-500/10' },
-    { label: 'মোট ইউজার', value: '১,২৪০', icon: <Users className="text-blue-500" />, trend: '+৫.২%', trendUp: true, bgColor: 'bg-blue-500/10' },
-    { label: 'পেন্ডিং অর্ডার', value: '৪২', icon: <ShoppingCart className="text-orange-500" />, trend: '-৩.১%', trendUp: false, bgColor: 'bg-orange-500/10' },
-    { label: 'পেন্ডিং পেমেন্ট', value: '১২', icon: <CreditCard className="text-pink-500" />, trend: '+৮.৪%', trendUp: true, bgColor: 'bg-pink-500/10' },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const recentOrders = [
-    { id: 5042, user: 'মুকিত হাসান', service: 'FB Page Followers', quantity: '১০০০', cost: '৳ ১২০', status: 'Processing' },
-    { id: 5041, user: 'তানভীর আহমেদ', service: 'YT Watch Time', quantity: '৪০০০', cost: '৳ ৮৫০', status: 'Pending' },
-    { id: 5040, user: 'সাকিব আল হাসান', service: 'IG Likes', quantity: '৫০০', cost: '৳ ৪০', status: 'Completed' },
-    { id: 5039, user: 'রাকিবুল ইসলাম', service: 'TikTok Views', quantity: '১০০০০', cost: '৳ ১৫০', status: 'Processing' },
-  ];
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const [ordersRes, usersRes, paymentsRes] = await Promise.all([
+        fetch('/api/orders', { headers }),
+        fetch('/api/users', { headers }),
+        fetch('/api/payments', { headers }),
+      ]);
+
+      const ordersData = await ordersRes.json();
+      const usersData = await usersRes.json();
+      const paymentsData = await paymentsRes.json();
+
+      const allOrders = ordersData.success ? ordersData.data : [];
+      const allUsers = usersData.success ? usersData.data : [];
+      const allPayments = paymentsData.success ? paymentsData.data : [];
+
+      const totalRevenue = allOrders
+        .filter(o => o.status === 'Completed')
+        .reduce((sum, o) => sum + (o.charge || 0), 0);
+
+      const pendingOrders = allOrders.filter(o => o.status === 'Pending' || o.status === 'Processing').length;
+      const pendingPayments = allPayments.filter(p => p.status === 'Pending').length;
+
+      setStats([
+        { label: 'মোট রেভিনিউ', value: `৳ ${totalRevenue.toFixed(2)}`, icon: <TrendingUp className="text-emerald-500" />, bgColor: 'bg-emerald-500/10', trendUp: true, trend: '+Live' },
+        { label: 'মোট ইউজার', value: allUsers.length.toLocaleString(), icon: <Users className="text-blue-500" />, bgColor: 'bg-blue-500/10', trendUp: true, trend: `+${allUsers.length}` },
+        { label: 'পেন্ডিং অর্ডার', value: pendingOrders.toString(), icon: <ShoppingCart className="text-orange-500" />, bgColor: 'bg-orange-500/10', trendUp: false, trend: `${pendingOrders} Active` },
+        { label: 'পেন্ডিং পেমেন্ট', value: pendingPayments.toString(), icon: <CreditCard className="text-pink-500" />, bgColor: 'bg-pink-500/10', trendUp: true, trend: `${pendingPayments} New` },
+      ]);
+
+      setOrders(allOrders.slice(0, 10));
+    } catch (err) {
+      setError('ডাটা লোড করতে সমস্যা হয়েছে।');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed': return 'text-emerald-400 bg-emerald-400/10';
       case 'Pending': return 'text-orange-400 bg-orange-400/10';
       case 'Processing': return 'text-blue-400 bg-blue-400/10';
+      case 'Cancelled': return 'text-red-400 bg-red-400/10';
       default: return 'text-secondary bg-white/5';
     }
   };
+
+  if (loading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-4 border-accent-primary/20 border-t-accent-primary rounded-full animate-spin" />
+        <p className="text-secondary text-sm">ডাটা লোড হচ্ছে...</p>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="glass p-10 text-center space-y-4">
+      <p className="text-red-400">{error}</p>
+      <button onClick={fetchData} className="btn-primary gap-2 mx-auto">
+        <RefreshCw className="w-4 h-4" /> আবার চেষ্টা করুন
+      </button>
+    </div>
+  );
 
   return (
     <div className="space-y-10">
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, idx) => (
+        {stats?.map((stat, idx) => (
           <motion.div 
             key={idx}
             initial={{ opacity: 0, y: 20 }}
@@ -46,11 +104,10 @@ const AdminOverview = () => {
             transition={{ delay: idx * 0.1 }}
             className="glass p-6 group hover:border-accent-primary/50 transition-all cursor-default relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-accent-primary/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-accent-primary/10 transition-colors"></div>
-            
+            <div className="absolute top-0 right-0 w-24 h-24 bg-accent-primary/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-accent-primary/10 transition-colors" />
             <div className="flex justify-between items-start mb-4 relative z-10">
-              <div className={`p-3 rounded-xl border border-white/5 bg-white/5`}>{stat.icon}</div>
-              <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-black tracking-widest leading-none ${stat.trendUp ? 'text-emerald-500 bg-emerald-500/10' : 'text-red-500 bg-red-500/10'}`}>
+              <div className="p-3 rounded-xl border border-white/5 bg-white/5">{stat.icon}</div>
+              <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-black tracking-widest leading-none ${stat.trendUp ? 'text-emerald-500 bg-emerald-500/10' : 'text-orange-500 bg-orange-500/10'}`}>
                 {stat.trend}
                 {stat.trendUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
               </div>
@@ -68,7 +125,9 @@ const AdminOverview = () => {
             <span className="text-accent-primary text-[10px] uppercase font-black tracking-[0.3em] mb-2 block leading-none">Global Log</span>
             <h2 className="text-4xl font-black font-['Outfit'] tracking-tighter">Recent Orders</h2>
           </div>
-          <button className="px-6 py-2.5 rounded-xl border border-glass-border hover:border-accent-primary text-xs font-bold transition-all hover:bg-accent-primary/10">View All</button>
+          <button onClick={fetchData} className="px-6 py-2.5 rounded-xl border border-glass-border hover:border-accent-primary text-xs font-bold transition-all hover:bg-accent-primary/10 flex items-center gap-2">
+            <RefreshCw className="w-3 h-3" /> Refresh
+          </button>
         </div>
 
         <div className="glass border-white/5 overflow-hidden rounded-3xl">
@@ -80,19 +139,23 @@ const AdminOverview = () => {
                   <th>ইউজার</th>
                   <th>সার্ভিস</th>
                   <th>পরিমান</th>
-                  <th>কস্ট (Cost)</th>
+                  <th>চার্জ</th>
                   <th className="w-32">স্ট্যাটাস</th>
                   <th className="text-right pr-8">একশন</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="group hover:bg-white/[0.02] transition-colors">
-                    <td className="py-5 font-bold font-['Outfit'] text-accent-primary px-6">#{order.id}</td>
-                    <td className="font-medium">{order.user}</td>
-                    <td className="text-neutral-400 font-medium">{order.service}</td>
-                    <td className="font-black text-xs tracking-widest">{order.quantity}</td>
-                    <td className="font-black font-['Outfit'] text-lg">{order.cost}</td>
+                {orders.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-16 text-center text-secondary">কোনো অর্ডার পাওয়া যায়নি।</td>
+                  </tr>
+                ) : orders.map((order) => (
+                  <tr key={order._id} className="group hover:bg-white/[0.02] transition-colors">
+                    <td className="py-5 font-bold font-['Outfit'] text-accent-primary px-6">#{order._id?.slice(-5).toUpperCase()}</td>
+                    <td className="font-medium">{order.user?.name || 'N/A'}</td>
+                    <td className="text-neutral-400 font-medium truncate max-w-[200px]">{order.serviceName || order.serviceId}</td>
+                    <td className="font-black text-xs tracking-widest">{order.quantity?.toLocaleString()}</td>
+                    <td className="font-black font-['Outfit'] text-lg">৳ {order.charge?.toFixed(2)}</td>
                     <td>
                       <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest leading-none ${getStatusColor(order.status)}`}>
                         {order.status}

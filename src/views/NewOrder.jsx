@@ -389,9 +389,5 @@ const NewOrder = () => {
   );
 };
 
-    </div>
-  );
-};
-
 
 export default NewOrder;
