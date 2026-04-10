@@ -49,6 +49,7 @@ const AdminLayout = () => {
     { to: '/admin/users', icon: <Users className="w-5 h-5" />, label: 'ইউজার ম্যানেজ' },
     { to: '/admin/payments', icon: <CreditCard className="w-5 h-5" />, label: 'পেমেন্ট রিকোয়েস্ট' },
     { to: '/admin/orders', icon: <ShoppingCart className="w-5 h-5" />, label: 'সব অর্ডার' },
+    { to: '/dashboard', icon: <LogOut className="w-5 h-5 rotate-180" />, label: 'ড্যাশবোর্ডে ফিরুন' },
   ];
 
   return (

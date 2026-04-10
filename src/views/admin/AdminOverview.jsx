@@ -41,11 +41,11 @@ const AdminOverview = () => {
       const allPayments = paymentsData.success ? paymentsData.data : [];
 
       const totalRevenue = allOrders
-        .filter(o => o.status === 'Completed')
+        .filter(o => ['completed', 'Completed'].includes(o.status))
         .reduce((sum, o) => sum + (o.charge || 0), 0);
 
-      const pendingOrders = allOrders.filter(o => o.status === 'Pending' || o.status === 'Processing').length;
-      const pendingPayments = allPayments.filter(p => p.status === 'Pending').length;
+      const pendingOrders = allOrders.filter(o => ['pending', 'Pending', 'processing', 'Processing', 'In Progress'].includes(o.status)).length;
+      const pendingPayments = allPayments.filter(p => ['pending', 'Pending'].includes(p.status)).length;
 
       const smmBalanceUSD = parseFloat(balanceData.data?.balance || '0');
       const smmBalanceBDT = (smmBalanceUSD * 120).toFixed(2);
@@ -71,13 +71,12 @@ const AdminOverview = () => {
   }, []);
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case 'Completed': return 'text-emerald-400 bg-emerald-400/10';
-      case 'Pending': return 'text-orange-400 bg-orange-400/10';
-      case 'Processing': return 'text-blue-400 bg-blue-400/10';
-      case 'Cancelled': return 'text-red-400 bg-red-400/10';
-      default: return 'text-secondary bg-white/5';
-    }
+    const s = (status || '').toLowerCase();
+    if (s === 'completed') return 'text-emerald-400 bg-emerald-400/10';
+    if (s === 'pending') return 'text-orange-400 bg-orange-400/10';
+    if (s === 'processing' || s === 'in progress') return 'text-blue-400 bg-blue-400/10';
+    if (s === 'cancelled' || s === 'canceled') return 'text-red-400 bg-red-400/10';
+    return 'text-secondary bg-white/5';
   };
 
   if (loading) return (
@@ -160,7 +159,7 @@ const AdminOverview = () => {
                 ) : orders.map((order) => (
                   <tr key={order._id} className="group hover:bg-white/[0.02] transition-colors">
                     <td className="py-5 font-bold font-['Outfit'] text-accent-primary px-6">#{order._id?.slice(-5).toUpperCase()}</td>
-                    <td className="font-medium">{order.user?.name || 'N/A'}</td>
+                    <td className="font-medium">{order.userId?.name || 'N/A'}</td>
                     <td className="text-neutral-400 font-medium truncate max-w-[200px]">{order.serviceName || order.serviceId}</td>
                     <td className="font-black text-xs tracking-widest">{order.quantity?.toLocaleString()}</td>
                     <td className="font-black font-['Outfit'] text-lg">৳ {order.charge?.toFixed(2)}</td>

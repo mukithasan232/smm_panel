@@ -83,6 +83,8 @@ const DashboardLayout = () => {
     { to: '/dashboard/services', icon: <TrendingUp className="w-5 h-5" />, label: 'Services' },
     { to: '/dashboard/add-funds', icon: <Wallet className="w-5 h-5" />, label: 'Add funds' },
     { to: '/dashboard/support', icon: <HelpCircle className="w-5 h-5" />, label: 'Support Box' },
+    // Admin-only link
+    ...(userData?.role === 'admin' ? [{ to: '/admin', icon: <Settings className="w-5 h-5" />, label: 'Admin Panel' }] : []),
   ];
 
   const toggleSidebar = () => setIsSidebarCollapsed(!isSidebarCollapsed);
