@@ -1,13 +1,13 @@
 {
-  "functions": {
-    "api/*.php": {
-      "runtime": "vercel-php@0.7.2"
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/server/server.js"
     },
-    "*.php": {
-      "runtime": "vercel-php@0.7.2"
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  },
-  "routes": [
-    { "src": "/(.*)", "dest": "/$1" }
   ]
 }

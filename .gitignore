@@ -1,16 +1,33 @@
-# System files
+# Dependencies
+node_modules/
+dist/
+build/
+.next/
+out/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+server/.env
+server/.env.local
+
+# Debugging and Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# System Files
 .DS_Store
 Thumbs.db
 
-# Environment/Sensitive files
-includes/config.php
+# Vercel
+.vercel
 
-# PHP built-in server files
-.router.php
-
-# Database exports
-database.sql
-
-# Local logs
-*.log
-error_log
+# VS Code
+.vscode/
+.history/
+*.code-workspace
