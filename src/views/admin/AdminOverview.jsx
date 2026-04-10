@@ -126,13 +126,15 @@ const AdminOverview = () => {
 
       {/* Recent Orders Table */}
       <div className="space-y-6">
-        <div className="flex justify-between items-end px-2">
-          <div>
-            <span className="text-accent-primary text-[10px] uppercase font-black tracking-[0.3em] mb-2 block leading-none">Management Log</span>
-            <h2 className="text-4xl font-black font-['Outfit'] tracking-tighter">API Execution Queue</h2>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 px-2 py-1 rounded-lg bg-accent-primary/5 border border-accent-primary/10">
+              <span className="text-secondary text-[10px] uppercase font-black tracking-[0.3em] leading-none">Management Log</span>
+            </div>
+            <h2 className="text-5xl font-black font-['Outfit'] tracking-tighter text-white">API Execution Queue</h2>
           </div>
-          <button onClick={fetchData} className="px-6 py-2.5 rounded-xl border border-glass-border hover:border-accent-primary text-xs font-bold transition-all hover:bg-accent-primary/10 flex items-center gap-2">
-            <RefreshCw className="w-3 h-3" /> Refresh
+          <button onClick={fetchData} className="px-8 h-14 rounded-2xl border border-glass-border hover:border-accent-primary text-xs font-black uppercase tracking-widest transition-all hover:bg-accent-primary/10 flex items-center gap-2 group shadow-xl">
+            <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" /> Refresh Data
           </button>
         </div>
 

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Mail, ShieldAlert, Ban, RefreshCw, Check } from 'lucide-react';
+import { Search, Filter, Mail, ShieldAlert, Ban, RefreshCw, Check, Edit2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [editingBalance, setEditingBalance] = useState(null); // { userId, currentBalance, newBalance }
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -24,6 +25,30 @@ const ManageUsers = () => {
       toast.error('সার্ভারের সাথে যোগাযোগ করা সম্ভব হয়নি।');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUpdateBalance = async (userId, newBalance) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({ balance: parseFloat(newBalance) })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('ব্যালেন্স সফলভাবে আপডেট হয়েছে!');
+        setEditingBalance(null);
+        fetchUsers();
+      } else {
+        toast.error(data.message || 'আপডেট ব্যর্থ হয়েছে।');
+      }
+    } catch (err) {
+      toast.error('সার্ভার ত্রুটি।');
     }
   };
 
@@ -92,7 +117,35 @@ const ManageUsers = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="font-bold text-emerald-500">৳ {(user.balance || 0).toFixed(2)}</td>
+                    <td className="font-bold">
+                      {editingBalance?.userId === user._id ? (
+                        <div className="flex items-center gap-2">
+                           <input 
+                             autoFocus
+                             type="number" 
+                             className="w-24 h-9 bg-white/5 border border-white/10 rounded-lg px-2 text-xs font-bold focus:outline-none focus:border-accent-primary"
+                             value={editingBalance.newBalance}
+                             onChange={(e) => setEditingBalance({...editingBalance, newBalance: e.target.value})}
+                           />
+                           <button onClick={() => handleUpdateBalance(user._id, editingBalance.newBalance)} className="p-1.5 bg-accent-primary rounded-lg text-white">
+                             <Check className="w-3.5 h-3.5" />
+                           </button>
+                           <button onClick={() => setEditingBalance(null)} className="p-1.5 bg-white/5 rounded-lg text-secondary">
+                             <X className="w-3.5 h-3.5" />
+                           </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 group/balance">
+                          <span className="text-emerald-500">৳ {(user.balance || 0).toFixed(2)}</span>
+                          <button 
+                            onClick={() => setEditingBalance({ userId: user._id, newBalance: user.balance })}
+                            className="opacity-0 group-hover/balance:opacity-100 p-1 hover:text-white transition-opacity"
+                          >
+                             <Edit2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+                    </td>
                     <td>
                       <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
                         user.role === 'admin' ? 'text-purple-400 bg-purple-400/10' : 'text-blue-400 bg-blue-400/10'
