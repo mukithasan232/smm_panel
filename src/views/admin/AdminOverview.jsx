@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   TrendingUp, 
   Users, 
@@ -8,14 +8,22 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   MoreVertical,
-  RefreshCw
+  RefreshCw,
+  ExternalLink,
+  Copy,
+  RotateCw,
+  XCircle,
+  Eye
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const AdminOverview = () => {
   const [orders, setOrders] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openMenu, setOpenMenu] = useState(null); // tracks which order's menu is open
+  const [syncing, setSyncing] = useState(null); // tracks which order is syncing
 
   const fetchData = async () => {
     setLoading(true);
@@ -168,10 +176,79 @@ const AdminOverview = () => {
                         {order.status}
                       </span>
                     </td>
-                    <td className="text-right pr-6">
-                      <button className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all border border-transparent hover:border-glass-border">
+                    <td className="text-right pr-6 relative">
+                      <button 
+                        onClick={() => setOpenMenu(openMenu === order._id ? null : order._id)}
+                        className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all border border-transparent hover:border-glass-border"
+                      >
                         <MoreVertical className="w-4 h-4 text-secondary" />
                       </button>
+
+                      <AnimatePresence>
+                        {openMenu === order._id && (
+                          <>
+                            <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
+                            <motion.div
+                              initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                              className="absolute right-6 top-full mt-2 w-52 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-20 p-1.5 overflow-hidden"
+                            >
+                              <button
+                                disabled={syncing === order._id}
+                                onClick={async () => {
+                                  setOpenMenu(null);
+                                  setSyncing(order._id);
+                                  try {
+                                    const token = localStorage.getItem('token');
+                                    const res = await fetch(`/api/orders/${order._id}/status`, { headers: { Authorization: `Bearer ${token}` } });
+                                    const data = await res.json();
+                                    if (data.success) {
+                                      setOrders(prev => prev.map(o => o._id === order._id ? { ...o, status: data.status } : o));
+                                      toast.success(`Status synced: ${data.status}`);
+                                    } else {
+                                      toast.error(data.message || 'Sync failed');
+                                    }
+                                  } catch { toast.error('Sync error'); }
+                                  finally { setSyncing(null); }
+                                }}
+                                className="flex items-center gap-3 w-full px-4 py-3 text-xs font-bold text-white hover:bg-accent-primary/10 rounded-xl transition-all"
+                              >
+                                <RotateCw className={`w-4 h-4 text-accent-primary ${syncing === order._id ? 'animate-spin' : ''}`} /> Sync Status
+                              </button>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(order.link || '');
+                                  toast.success('Link copied!');
+                                  setOpenMenu(null);
+                                }}
+                                className="flex items-center gap-3 w-full px-4 py-3 text-xs font-bold text-white hover:bg-white/5 rounded-xl transition-all"
+                              >
+                                <Copy className="w-4 h-4 text-blue-400" /> Copy Link
+                              </button>
+                              <button
+                                onClick={() => {
+                                  window.open(order.link, '_blank');
+                                  setOpenMenu(null);
+                                }}
+                                className="flex items-center gap-3 w-full px-4 py-3 text-xs font-bold text-white hover:bg-white/5 rounded-xl transition-all"
+                              >
+                                <ExternalLink className="w-4 h-4 text-emerald-400" /> Open Link
+                              </button>
+                              <div className="border-t border-white/5 my-1" />
+                              <button
+                                onClick={() => {
+                                  toast(`Order #${order._id?.slice(-5).toUpperCase()}\nService: ${order.serviceName}\nQty: ${order.quantity}\nCharge: ৳${order.charge?.toFixed(2)}\nProvider ID: ${order.smmgenOrderId || 'N/A'}`, { icon: '📋', duration: 5000 });
+                                  setOpenMenu(null);
+                                }}
+                                className="flex items-center gap-3 w-full px-4 py-3 text-xs font-bold text-white hover:bg-white/5 rounded-xl transition-all"
+                              >
+                                <Eye className="w-4 h-4 text-purple-400" /> View Details
+                              </button>
+                            </motion.div>
+                          </>
+                        )}
+                      </AnimatePresence>
                     </td>
                   </tr>
                 ))}
